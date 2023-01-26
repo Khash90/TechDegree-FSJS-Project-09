@@ -48,8 +48,11 @@ module.exports = (sequelize) => {
                 },
                 notEmpty: {
                     msg: 'Please provide a valid Email'
-                }
-            }
+                },
+                isEmail: {
+                    msg: 'Please provide a valid email address'
+                  },
+            },
         },
         password: {
             type: DataTypes.STRING,
