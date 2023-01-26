@@ -158,6 +158,7 @@ router.put("/courses/:id", authenticateUser , asyncHandler(async(req,res) => {
   }
 }));
 
+
 //Delete course
 router.delete('/courses/:id', authenticateUser , asyncHandler(async(req,res) => {
     const user = req.currentUser;
