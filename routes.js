@@ -22,8 +22,8 @@ const { authenticateUser } = require("./middleware/auth-user");
 //Get all properties and values for the currently authenticated User
 
 router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
-    const user = req.currentUser;
 
+    const user = req.currentUser;
     res.status(200).json({
         id: user.id,
         firstName: user.firstName,
@@ -33,7 +33,7 @@ router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
  })
 );
 
-//create new use , setting location header to "/" 
+//create new user , setting location header to "/" 
 
 
 
