@@ -52,7 +52,7 @@ module.exports = (sequelize) => {
             }
         },
         password: {
-            type: DataTypes.VIRTUAL,
+            type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notNull: {
@@ -61,10 +61,6 @@ module.exports = (sequelize) => {
                 notEmpty: {
                     msg: 'Please provide a password'
                 },
-                len: {
-                    args: [6, 20],
-                    msg: 'The password should be between 6 and 20 characters in length'
-                }
             },
             set(val){
                 const hashedPassword = bcrypt.hashSync(val, 10);

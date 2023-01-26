@@ -9,8 +9,7 @@ const router = express.Router();
 
 
 //Import models
-const { User } = require('./models').User;
-const { Course } = require('./models').Course;
+const { User, Course } = require('./models');
 const { asyncHandler } = require('./middleware/async-handler');
 const { authenticateUser } = require("./middleware/auth-user");
 
