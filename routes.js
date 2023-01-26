@@ -2,28 +2,37 @@
 
 //Import modules
 const express = require('express');
-const auth = require('basic-auth');
 
 
+//express router
 const router = express.Router();
 
 
 //Import models
-
 const { User } = require('./models').User;
 const { Course } = require('./models').Course;
+const { asyncHandler } = require('./middleware/async-handler');
+const { authenticateUser } = require("./middleware/auth-user");
 
-//Handler function to wrap each route.
-function asyncHandler(cb) {
-    return async(req,res,next) => {
-        try {
-            await cb(req,res,nex);
-        } catch (err) {
-            //forward error to the global error handler
-            next(err);
-        }
-    }
-}
+
+/***************/
+/* USER ROUTES */
+/***************/
+
+//Get all properties and values for the currently authenticated User
+
+router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
+    const user = req.currentUser;
+
+    res.status(200).json({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailAddress: user.emailAddress
+    });
+ })
+);
+
 
 
 
