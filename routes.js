@@ -117,6 +117,7 @@ router.post("/courses", authenticateUser, asyncHandler(async(req,res) => {
             userId: user.id,
         });
         res.status(201).location(`courses/${course.id}`).end();
+
     } catch (error) {
         if (
             error.name === 'SequelizeValidationError' || 
@@ -129,5 +130,33 @@ router.post("/courses", authenticateUser, asyncHandler(async(req,res) => {
     }
  })
 );
+
+//Update specific course
+router.put("/courses/:id", authenticateUser , asyncHandler(async(req,res) => {
+  try {
+    const user = req.currentUser;
+    const course = await Course.findOne({
+        where:{
+            id: req.params.id,
+        }
+    });
+    if(course.userId === user.id) {
+        await course.update(req.body)
+        res.status(204).end()
+    } else {
+        res.status(403).json({message: `you dont have permission to edit ${course.title}`}).end()
+    }
+
+  } catch (error) {
+    if(error.name === 'SequelizeValidationError' ||
+       error.name === 'SequelizeUniqueConstraintError') {
+        const errors = error.errors.map((err) => err.message);
+                res.status(400).json({ errors });
+       } else {
+        res.status(500).json({message: 'cannot add course to the database'})
+    }
+  }
+}));
+
 
 module.exports = router;
