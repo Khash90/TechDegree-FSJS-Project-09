@@ -33,6 +33,8 @@ router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
  })
 );
 
+//create new use , setting location header to "/" 
+
 
 
 
