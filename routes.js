@@ -21,7 +21,7 @@ const { authenticateUser } = require("./middleware/auth-user");
 
 //Get all properties and values for the currently authenticated User
 
-router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
+router.get("/users", authenticateUser ,asyncHandler(async(req,res) => {
 
     const user = req.currentUser;
     res.status(200).json({
@@ -34,7 +34,21 @@ router.get("/users",authenticateUser, asyncHandler(async(req,res) => {
 );
 
 //create new user , setting location header to "/" 
-
+router.post("/users", asyncHandler(async(req,res) => {
+    try {
+        await User.create(req.body);
+        res.location("/");
+        res.status(201).end();
+    } catch (error) {
+        if(error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
+            const errors = error.errors.map((err) => err.message);
+            res.status(400).json({ errors })
+        } else {
+            throw error;
+        }
+     }
+  })
+);
 
 
 

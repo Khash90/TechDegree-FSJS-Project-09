@@ -19,7 +19,7 @@ exports.authenticateUser = async(req,res,next) => {
         });
         if(user){
             const authenticated = bcrypt
-            .compareSync(credentials.pass, user.confirmedPassword);
+            .compareSync(credentials.pass, user.password);
             if(authenticated) {
                 console.log(`Authentication successfull for emailAddress: ${user.emailAddress}`);
 
