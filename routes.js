@@ -144,7 +144,7 @@ router.put("/courses/:id", authenticateUser , asyncHandler(async(req,res) => {
         await course.update(req.body)
         res.status(204).end()
     } else {
-        res.status(403).json({message: `you dont have permission to edit ${course.title}`}).end()
+        res.status(403).json({message: `you dont have permission to edit "${course.title}" `}).end()
     }
 
   } catch (error) {
@@ -156,6 +156,23 @@ router.put("/courses/:id", authenticateUser , asyncHandler(async(req,res) => {
         res.status(500).json({message: 'cannot add course to the database'})
     }
   }
+}));
+
+//Delete course
+router.delete('/courses/:id', authenticateUser , asyncHandler(async(req,res) => {
+    const user = req.currentUser;
+    const course = await Course.findOne({
+        where:{
+            id: req.params.id,
+        }
+    });
+
+    if(course.userId === user.id){
+        await course.destroy()
+        res.status(204).end()
+    } else {
+        res.status(403).json({message: `You dont have permission to delete "${course.title}" `}).end()
+    }
 }));
 
 
