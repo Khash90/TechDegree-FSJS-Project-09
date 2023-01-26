@@ -37,6 +37,7 @@ router.post("/users", asyncHandler(async(req,res) => {
     try {
         await User.create(req.body);
         res.location("/");
+        res.json({message: 'Account successfully created'});
         res.status(201).end();
     } catch (error) {
         if(error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
@@ -50,5 +51,83 @@ router.post("/users", asyncHandler(async(req,res) => {
 );
 
 
+/*****************/
+/* COURSE ROUTES */
+/*****************/
+const AssociateOptions = {
+    model: User
+}
+
+const userExclusions = {
+    attributes: {
+        exclude: ["password", "createdAt", "updatedAt"],
+    },
+}
+
+//GET all courses including associated user for each
+router.get("/courses", asyncHandler(async(req,res) => {
+    const course = await Course.findAll({
+        include: [
+        {
+            ...AssociateOptions,
+            ...userExclusions,
+        },
+       ],
+       attributes: {exclude: ['createdAt', 'updatedAt', 'userId']}
+    });
+    if (course){
+        res.json(course);
+    } else {
+        res.status(404).json({ message: "Course not found." })
+    }
+  })
+);
+
+//GET specific course and associated user
+router.get("/courses/:id", asyncHandler(async(req,res) => {
+    const course = await Course.findOne({
+        where: {
+            id: req.params.id,
+        },
+        include: [
+            {
+                ...AssociateOptions,
+                ...userExclusions,
+            },
+        ],
+        attributes: {
+            exclude: ["createdAt", "updatedAt"]
+        },
+    });
+    if(course){
+        res.json(course);
+    } else {
+        res.status(404).json({ message: "No course found with mentioned id" })
+    }
+  })
+);
+
+// POST new course
+router.post("/courses", authenticateUser, asyncHandler(async(req,res) => {
+    try {
+        const user = req.currentUser;
+        const course = await Course.create({
+            title: req.body.title,
+            description: req.body.description,
+            userId: user.id,
+        });
+        res.status(201).location(`courses/${course.id}`).end();
+    } catch (error) {
+        if (
+            error.name === 'SequelizeValidationError' || 
+            error.name === 'SequelizeUniqueConstraintError') {
+                const errors = error.errors.map((err) => err.message);
+                res.status(400).json({ errors });
+        } else {
+            res.status(500).json({message: 'cannot add course to the database'})
+        }
+    }
+ })
+);
 
 module.exports = router;
