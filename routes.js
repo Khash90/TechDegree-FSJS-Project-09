@@ -21,7 +21,7 @@ const { authenticateUser } = require("./middleware/auth-user");
 
 //Get all properties and values for the currently authenticated User
 
-router.get("/users", authenticateUser ,asyncHandler(async(req,res) => {
+router.get('/users', authenticateUser ,asyncHandler(async(req,res) => {
 
     const user = req.currentUser;
     res.status(200).json({
