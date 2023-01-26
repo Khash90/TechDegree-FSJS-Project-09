@@ -18,8 +18,10 @@ there are two middlewares in this project in the folder middleware.
 # 2-auth-user:
   also for authenticateUser done the same to make the codes much more readable.
 
+# To Test the app:
+make sure running npm install and then npm start.
 
-there are no renders for this project , you can test the different routes in "POSTMAN" software by importing "RESTAPI.postman_collection" in the postman and just choosing different provided routs and clicking send to see the results which are reading ,creating , editing and deleting.
+there are no renders for this project , you can test the different routes in "POSTMAN" software by importing "RESTAPI.postman_collection" file in the postman and just choosing different provided routes and clicking send to see the results which are reading ,creating , editing and deleting.
 
 thank you TreeHouse for another challenging project.
 
